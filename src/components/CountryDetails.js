@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-const CountryDetail = ({ country }) => {
+const CountryDetail = ({ country, addNewNote }) => {
   const [answer, setAnswer] = useState("");
   const [buttonClicked, setButtonClicked] = useState(false);
-  const [note, setNote] = useState([
-    { country: "Korea", capital: "Seol" },
-    { country: "China", capital: "Beijing" },
-    { country: "UK", capital: "London" },
-  ]);
+  const [saved,setSaved]=useState(false)
 
   const handleChange = (e) => {
     setAnswer(e.target.value);
@@ -16,6 +12,14 @@ const CountryDetail = ({ country }) => {
   const handleClick = () => {
     setButtonClicked(true);
   };
+
+  
+  const handleSave=()=>{
+    if (!saved)
+        addNewNote();
+      
+       
+  }
 
   const capital = country.capital.length !== 0 ? country.capital[0] : null;
 
@@ -26,13 +30,15 @@ const CountryDetail = ({ country }) => {
       buttonClicked &&
       answer.toLowerCase() === capital.toLowerCase()
     ) {
-      return `Correct!`;
+      return "Correct!";
     }
   };
 
   useEffect(() => {
     setAnswer(""); // Reset the answer when a new country is selected
     setButtonClicked(false); // Reset the buttonClicked state
+    setSaved(false)
+
   }, [country]); // Trigger the effect when the country prop changes
 
   return (
@@ -40,8 +46,9 @@ const CountryDetail = ({ country }) => {
       <>
         Where is the capital of {country.name.common}?
         <input type="text" value={answer} onChange={handleChange} />
-        <button onClick={handleClick}>Check</button>
+        <button onClick={handleClick}>check</button>
         <p>{checkAnswer()}</p>
+        {buttonClicked && <button onClick={handleSave}>Save</button>}
       </>
     </div>
   );
